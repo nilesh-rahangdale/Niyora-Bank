@@ -1,0 +1,821 @@
+{
+  "info": {
+    "name": "EBanking System - Complete API",
+    "description": "Complete collection of all endpoints for EBanking System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{authToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth APIs",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@bank.com\",\n  \"password\": \"password123\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"phoneNumber\": \"1234567890\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set(\"authToken\", jsonData.token);",
+                  "    console.log(\"Token saved:\", jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"teller@bank.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"oldPassword\": \"password123\",\n  \"newPassword\": \"newPassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/change-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "change-password"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Account APIs",
+      "item": [
+        {
+          "name": "Create Account (CSO)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": 1,\n  \"accountType\": \"SAVINGS\",\n  \"branchCode\": \"BR001\",\n  \"initialDeposit\": 1000.00\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/accounts/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "accounts", "create"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Accounts by Customer ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/accounts/customer/:customerId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "accounts", "customer", ":customerId"],
+              "variable": [
+                {
+                  "key": "customerId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Accounts by Branch Code",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/accounts/branchCode/:branchCode",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "accounts", "branchCode", ":branchCode"],
+              "variable": [
+                {
+                  "key": "branchCode",
+                  "value": "BR001"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Account by Account Number",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/accounts/accountNumber/:accountNumber",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "accounts", "accountNumber", ":accountNumber"],
+              "variable": [
+                {
+                  "key": "accountNumber",
+                  "value": "ACC001"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cash Deposit (Teller)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accountNumber\": \"ACC001\",\n  \"amount\": 500.00\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/accounts/cashDeposit",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "accounts", "cashDeposit"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cash Withdraw (Teller)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accountNumber\": \"ACC001\",\n  \"amount\": 200.00\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/accounts/cashWithdraw",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "accounts", "cashWithdraw"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Internal Money Transfer (Teller)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fromAccountNumber\": \"ACC001\",\n  \"toAccountNumber\": \"ACC002\",\n  \"amount\": 300.00,\n  \"remarks\": \"Payment for services\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/accounts/transfer/internal",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "accounts", "transfer", "internal"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Customer APIs",
+      "item": [
+        {
+          "name": "Register Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Smith\",\n  \"email\": \"customer@example.com\",\n  \"phoneNumber\": \"9876543210\",\n  \"address\": \"123 Main St\",\n  \"dateOfBirth\": \"1990-01-01\",\n  \"panNumber\": \"ABCDE1234F\",\n  \"aadharNumber\": \"123456789012\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customers", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Customer by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/:customerId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customers", ":customerId"],
+              "variable": [
+                {
+                  "key": "customerId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Customers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/customers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customers"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Customer",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Smith Updated\",\n  \"phoneNumber\": \"9876543210\",\n  \"address\": \"456 New St\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/:customerId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customers", ":customerId"],
+              "variable": [
+                {
+                  "key": "customerId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Customer",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/customers/:customerId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "customers", ":customerId"],
+              "variable": [
+                {
+                  "key": "customerId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Branch APIs",
+      "item": [
+        {
+          "name": "Create Branch",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"branchCode\": \"BR001\",\n  \"branchName\": \"Main Branch\",\n  \"address\": \"Downtown, City Center\",\n  \"phoneNumber\": \"1234567890\",\n  \"email\": \"mainbranch@bank.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/branches",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "branches"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Branches",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/branches",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "branches"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Branch by Code",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/branches/:branchCode",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "branches", ":branchCode"],
+              "variable": [
+                {
+                  "key": "branchCode",
+                  "value": "BR001"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Branch",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"branchName\": \"Main Branch Updated\",\n  \"address\": \"New Address\",\n  \"phoneNumber\": \"9876543210\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/branches/:branchCode",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "branches", ":branchCode"],
+              "variable": [
+                {
+                  "key": "branchCode",
+                  "value": "BR001"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Branch",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/branches/:branchCode",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "branches", ":branchCode"],
+              "variable": [
+                {
+                  "key": "branchCode",
+                  "value": "BR001"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "CSO APIs",
+      "item": [
+        {
+          "name": "Register CSO",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"cso@bank.com\",\n  \"password\": \"password123\",\n  \"firstName\": \"CSO\",\n  \"lastName\": \"Officer\",\n  \"phoneNumber\": \"1234567890\",\n  \"branchCode\": \"BR001\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cso/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cso", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All CSOs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cso",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cso"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get CSO by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cso/:csoId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cso", ":csoId"],
+              "variable": [
+                {
+                  "key": "csoId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Teller APIs",
+      "item": [
+        {
+          "name": "Register Teller",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"teller@bank.com\",\n  \"password\": \"password123\",\n  \"firstName\": \"Teller\",\n  \"lastName\": \"User\",\n  \"phoneNumber\": \"1234567890\",\n  \"branchCode\": \"BR001\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/teller/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "teller", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Tellers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/teller",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "teller"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Teller by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/teller/:tellerId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "teller", ":tellerId"],
+              "variable": [
+                {
+                  "key": "tellerId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Manager APIs",
+      "item": [
+        {
+          "name": "Register Manager",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"manager@bank.com\",\n  \"password\": \"password123\",\n  \"firstName\": \"Branch\",\n  \"lastName\": \"Manager\",\n  \"phoneNumber\": \"1234567890\",\n  \"branchCode\": \"BR001\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/manager/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "manager", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Managers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/manager",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "manager"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Manager by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/manager/:managerId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "manager", ":managerId"],
+              "variable": [
+                {
+                  "key": "managerId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin APIs",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/users/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "users", ":userId"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Approve User",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/users/:userId/approve",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "users", ":userId", "approve"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deactivate User",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/users/:userId/deactivate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "users", ":userId", "deactivate"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User APIs",
+      "item": [
+        {
+          "name": "Get Current User Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "me"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Updated\",\n  \"lastName\": \"Name\",\n  \"phoneNumber\": \"9876543210\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "me"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Test APIs",
+      "item": [
+        {
+          "name": "Public Test",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/test/public",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "test", "public"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Authenticated Test",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/test/authenticated",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "test", "authenticated"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Only Test",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/test/admin",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "test", "admin"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
