@@ -11,6 +11,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/branches")
 @RequiredArgsConstructor
@@ -30,7 +32,7 @@ public class BranchController {
 
 //    Get Branch by ID
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/{branchId}")
+    @GetMapping("/{branchId}")
     public ResponseEntity<?> getBranchById(@PathVariable Long branchId, Authentication auth) {
         if (auth == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not authenticated");
@@ -59,6 +61,17 @@ public class BranchController {
         }
         BranchRespDto branch = branchService.getBranchByBranchCode(branchCode);
         return ResponseEntity.ok(branch);
+    }
+
+    // Get All Branches
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
+    @GetMapping
+    public ResponseEntity<?> getAllBranches(Authentication auth) {
+        if (auth == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not authenticated");
+        }
+        List<BranchRespDto> branches = branchService.getAllBranches();
+        return ResponseEntity.ok(branches);
     }
 
 }

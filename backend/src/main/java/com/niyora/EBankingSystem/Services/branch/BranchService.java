@@ -13,6 +13,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class BranchService {
@@ -56,5 +59,11 @@ public class BranchService {
     public BranchRespDto getBranchByBranchCode(String branchCode) {
         Branch branch=branchRepo.findByBranchCode(branchCode).orElseThrow(()->new RuntimeException("Branch not found with Branch Code: "+branchCode));
         return branchMapper.toBranchRespSto(branch);
+    }
+
+    public List<BranchRespDto> getAllBranches() {
+        return branchRepo.findAll().stream()
+                .map(branchMapper::toBranchRespSto)
+                .collect(Collectors.toList());
     }
 }

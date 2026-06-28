@@ -2,6 +2,7 @@ package com.niyora.EBankingSystem.Services.teller;
 
 import com.niyora.EBankingSystem.DTOs.auth.RegisterReqDto;
 import com.niyora.EBankingSystem.DTOs.teller.TellerDto;
+import com.niyora.EBankingSystem.DTOs.teller.TellerUpdateDto;
 import com.niyora.EBankingSystem.Entities.branch.Branch;
 import com.niyora.EBankingSystem.Entities.users.Teller;
 import com.niyora.EBankingSystem.Entities.users.User;
@@ -16,7 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -75,5 +78,37 @@ public class TellerService {
         teller.setLastBalanced(lastBalancedDate);
         teller=tellerRepo.save(teller);
         return tellerMapper.toTellerDto(teller);
+    }
+
+    public List<TellerDto> getAllTellers() {
+        return tellerRepo.findAll().stream()
+                .map(tellerMapper::toTellerDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public TellerDto updateTeller(Long tellerId, TellerUpdateDto updateDto) {
+        Teller teller = tellerRepo.findById(tellerId)
+                .orElseThrow(() -> new RuntimeException("Teller not found with id: " + tellerId));
+        User user = teller.getUser();
+
+        if (updateDto.getFullName() != null) user.setFullName(updateDto.getFullName());
+        if (updateDto.getEmail() != null) user.setEmail(updateDto.getEmail());
+        if (updateDto.getPhoneNumber() != null) user.setPhoneNumber(updateDto.getPhoneNumber());
+        if (updateDto.getStatus() != null) user.setStatus(updateDto.getStatus());
+
+        if (updateDto.getBranchId() != null) {
+            Branch branch = branchRepo.findById(updateDto.getBranchId())
+                    .orElseThrow(() -> new RuntimeException("Branch not found with id: " + updateDto.getBranchId()));
+            teller.setBranch(branch);
+        }
+
+        if (updateDto.getCashDrawerId() != null) {
+            teller.setCashDrawerId(updateDto.getCashDrawerId());
+        }
+
+        userRepo.save(user);
+        Teller savedTeller = tellerRepo.save(teller);
+        return tellerMapper.toTellerDto(savedTeller);
     }
 }

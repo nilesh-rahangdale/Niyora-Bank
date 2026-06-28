@@ -22,5 +22,6 @@ where cu.customerId = :customerId
 """)
     List<Complaint> findCustomerComplaints(Long customerId);
 
+    List<Complaint> findByBranchBranchId(Long branchId);
 }
 

@@ -234,12 +234,91 @@ GET /api/admin/{adminId}
 ```
 
 **Auth Required:** Yes
+**Roles:** `ADMIN`, `MANAGER`
 
 | Param | Type | Description |
 |-------|------|-------------|
 | `adminId` | Long | Admin ID |
 
 **Response:** `200 OK` — `AdminDTO`
+
+---
+
+### 3.3 Get All Admins
+
+```
+GET /api/admin
+```
+
+**Auth Required:** Yes
+**Roles:** `ADMIN`, `MANAGER`
+
+**Response:** `200 OK` — `List<AdminDTO>`
+
+---
+
+### 3.4 Update Admin
+
+```
+PUT /api/admin/{adminId}
+```
+
+**Auth Required:** Yes
+**Roles:** `ADMIN`, `MANAGER`
+
+| Param | Type | Description |
+|-------|------|-------------|
+| `adminId` | Long | Admin ID to update |
+
+**Request Body:** `AdminUpdateDto`
+```json
+{
+  "fullName": "Updated Admin Name",
+  "email": "newemail@niyorabank.com",
+  "phoneNumber": "9876543210",
+  "status": "ACTIVE",
+  "adminLevel": "SUPER_ADMIN",
+  "permissions": "CRUD",
+  "branchId": 1
+}
+```
+
+**Response:** `200 OK` — `AdminDTO`
+
+---
+
+### 3.5 Get Admin Dashboard
+
+```
+GET /api/admin/dashboard
+```
+
+**Auth Required:** Yes
+**Roles:** `ADMIN`
+
+**Response:** `200 OK` — `AdminDashboardDto`
+
+```json
+{
+  "totalUsers": 12,
+  "usersByRole": {
+    "ROLE_ADMIN": 1,
+    "ROLE_MANAGER": 2,
+    "ROLE_TELLER": 3,
+    "ROLE_CSO": 2,
+    "ROLE_CUSTOMER": 4
+  },
+  "usersByStatus": {
+    "ACTIVE": 10,
+    "INACTIVE": 2
+  },
+  "totalBranches": 2,
+  "totalManagers": 2,
+  "totalTellers": 3,
+  "totalCsos": 2,
+  "totalCustomers": 4
+}
+```
 
 ---
 
@@ -311,6 +390,19 @@ POST /api/branches/branchCode/{branchCode}
 
 ---
 
+### 4.5 Get All Branches
+
+```
+GET /api/branches
+```
+
+**Auth Required:** Yes
+**Roles:** `ADMIN`, `MANAGER`
+
+**Response:** `200 OK` — `List<BranchRespDto>`
+
+---
+
 ## 5. Manager Management (`/api/manager`)
 
 ### 5.1 Register Manager
@@ -350,6 +442,92 @@ GET /api/manager/{managerId}
 **Roles:** `ADMIN`, `MANAGER`
 
 **Response:** `200 OK` — `ManagerDto`
+
+---
+
+### 5.3 Get All Managers
+
+```
+GET /api/manager
+```
+
+**Auth Required:** Yes
+**Roles:** `ADMIN`, `MANAGER`
+
+**Response:** `200 OK` — `List<ManagerDto>`
+
+---
+
+### 5.4 Update Manager
+
+```
+PUT /api/manager/{managerId}
+```
+
+**Auth Required:** Yes
+**Roles:** `ADMIN`, `MANAGER`
+
+| Param | Type | Description |
+|-------|------|-------------|
+| `managerId` | Long | Manager ID to update |
+
+**Request Body:** `ManagerUpdateDto`
+```json
+{
+  "fullName": "Updated Manager Name",
+  "email": "newmanager@niyorabank.com",
+  "phoneNumber": "9876543210",
+  "status": "ACTIVE",
+  "branchId": 2
+}
+```
+
+**Response:** `200 OK` — `ManagerDto`
+
+---
+
+### 5.5 Get Manager Dashboard
+
+```
+GET /api/manager/dashboard
+```
+
+**Auth Required:** Yes
+**Roles:** `MANAGER`
+
+**Response:** `200 OK` — `ManagerDashboardDto`
+
+```json
+{
+  "branchId": 1,
+  "branchName": "Mumbai Main",
+  "branchIfsc": "NIYO0100001",
+  "csos": [ /* List of CsoDto */ ],
+  "tellers": [ /* List of TellerDto */ ],
+  "totalCsos": 2,
+  "totalTellers": 3,
+  "totalCashDeposit": 150000.0,
+  "totalCashWithdrawal": 50000.0,
+  "totalChequeDeposit": 10000.0,
+  "totalChequeWithdrawal": 2000.0,
+  "totalTransferDebit": 5000.0,
+  "totalTransferCredit": 8000.0,
+  "totalComplaints": 5,
+  "pendingComplaints": 2,
+  "resolvedComplaints": 2,
+  "rejectedComplaints": 1,
+  "totalAccounts": 45,
+  "accountsByType": {
+    "SAVINGS": 30,
+    "CURRENT": 15
+  },
+  "accountsByStatus": {
+    "ACTIVE": 40,
+    "PENDING": 3,
+    "CLOSED": 2
+  }
+}
+```
 
 ---
 
@@ -429,6 +607,48 @@ POST /api/teller/setLastBalanced/?lastBalancedDate=2026-06-25T10:30:00
 
 ---
 
+### 6.5 Get All Tellers
+
+```
+GET /api/teller
+```
+
+**Auth Required:** Yes
+**Roles:** `ADMIN`, `MANAGER`
+
+**Response:** `200 OK` — `List<TellerDto>`
+
+---
+
+### 6.6 Update Teller
+
+```
+PUT /api/teller/{tellerId}
+```
+
+**Auth Required:** Yes
+**Roles:** `ADMIN`, `MANAGER`
+
+| Param | Type | Description |
+|-------|------|-------------|
+| `tellerId` | Long | Teller ID to update |
+
+**Request Body:** `TellerUpdateDto`
+```json
+{
+  "fullName": "Updated Teller Name",
+  "email": "newteller@niyorabank.com",
+  "phoneNumber": "9876543210",
+  "status": "ACTIVE",
+  "branchId": 2,
+  "cashDrawerId": "DRAWER-002"
+}
+```
+
+**Response:** `200 OK` — `TellerDto`
+
+---
+
 ## 7. CSO Management (`/api/cso`)
 
 ### 7.1 Register CSO
@@ -466,6 +686,47 @@ GET /api/cso/{csoId}
 
 **Auth Required:** Yes
 **Roles:** `ADMIN`, `MANAGER`, `CSO`
+
+**Response:** `200 OK` — `CsoDto`
+
+---
+
+### 7.3 Get All CSOs
+
+```
+GET /api/cso
+```
+
+**Auth Required:** Yes
+**Roles:** `ADMIN`, `MANAGER`
+
+**Response:** `200 OK` — `List<CsoDto>`
+
+---
+
+### 7.4 Update CSO
+
+```
+PUT /api/cso/{csoId}
+```
+
+**Auth Required:** Yes
+**Roles:** `ADMIN`, `MANAGER`
+
+| Param | Type | Description |
+|-------|------|-------------|
+| `csoId` | Long | CSO ID to update |
+
+**Request Body:** `CsoUpdateDto`
+```json
+{
+  "fullName": "Updated CSO Name",
+  "email": "newcso@niyorabank.com",
+  "phoneNumber": "9876543210",
+  "status": "ACTIVE",
+  "branchId": 2
+}
+```
 
 **Response:** `200 OK` — `CsoDto`
 
@@ -989,6 +1250,97 @@ GET /api/mobile/requests/complaints
 
 ## 12. Data Models (DTOs)
 
+### AdminDTO
+```json
+{
+  "userId": "Long",
+  "userDto": "UserDto",
+  "createdById": "Long",
+  "branchId": "Long (nullable)",
+  "adminLevel": "String",
+  "permissions": "String"
+}
+```
+
+### ManagerDto
+```json
+{
+  "managerId": "Long",
+  "userDto": "UserDto",
+  "createdById": "Long",
+  "branchId": "Long"
+}
+```
+
+### TellerDto
+```json
+{
+  "tellerId": "Long",
+  "userDto": "UserDto",
+  "createdById": "Long",
+  "branchId": "Long",
+  "cashDrawerId": "String",
+  "lastBalanced": "LocalDateTime"
+}
+```
+
+### CsoDto
+```json
+{
+  "csoId": "Long",
+  "userDto": "UserDto",
+  "createdById": "Long",
+  "branchId": "Long"
+}
+```
+
+### AdminUpdateDto
+```json
+{
+  "fullName": "String (optional)",
+  "email": "String (optional)",
+  "phoneNumber": "String (optional)",
+  "status": "ACTIVE | INACTIVE | BLOCKED (optional)",
+  "adminLevel": "String (optional)",
+  "permissions": "String (optional)",
+  "branchId": "Long (optional)"
+}
+```
+
+### ManagerUpdateDto
+```json
+{
+  "fullName": "String (optional)",
+  "email": "String (optional)",
+  "phoneNumber": "String (optional)",
+  "status": "ACTIVE | INACTIVE | BLOCKED (optional)",
+  "branchId": "Long (optional)"
+}
+```
+
+### TellerUpdateDto
+```json
+{
+  "fullName": "String (optional)",
+  "email": "String (optional)",
+  "phoneNumber": "String (optional)",
+  "status": "ACTIVE | INACTIVE | BLOCKED (optional)",
+  "branchId": "Long (optional)",
+  "cashDrawerId": "String (optional)"
+}
+```
+
+### CsoUpdateDto
+```json
+{
+  "fullName": "String (optional)",
+  "email": "String (optional)",
+  "phoneNumber": "String (optional)",
+  "status": "ACTIVE | INACTIVE | BLOCKED (optional)",
+  "branchId": "Long (optional)"
+}
+```
+
 ### UserDto
 ```json
 {
@@ -1061,6 +1413,64 @@ GET /api/mobile/requests/complaints
   "createdAt": "LocalDateTime",
   "rejectReason": "String (nullable)",
   "resolvedById": "Long (nullable)"
+}
+```
+
+### ManagerDashboardDto
+```json
+{
+  "branchId": "Long",
+  "branchName": "String",
+  "branchIfsc": "String",
+  "csos": ["CsoDto"],
+  "tellers": ["TellerDto"],
+  "totalCsos": "int",
+  "totalTellers": "int",
+  "totalCashDeposit": "Double",
+  "totalCashWithdrawal": "Double",
+  "totalChequeDeposit": "Double",
+  "totalChequeWithdrawal": "Double",
+  "totalTransferDebit": "Double",
+  "totalTransferCredit": "Double",
+  "totalComplaints": "int",
+  "pendingComplaints": "int",
+  "resolvedComplaints": "int",
+  "rejectedComplaints": "int",
+  "totalAccounts": "int",
+  "accountsByType": {
+    "SAVINGS": "Long",
+    "CURRENT": "Long"
+  },
+  "accountsByStatus": {
+    "PENDING": "Long",
+    "ACTIVE": "Long",
+    "INACTIVE": "Long",
+    "CLOSED": "Long"
+  }
+}
+```
+
+### AdminDashboardDto
+```json
+{
+  "totalUsers": "long",
+  "usersByRole": {
+    "ROLE_ADMIN": "Long",
+    "ROLE_MANAGER": "Long",
+    "ROLE_TELLER": "Long",
+    "ROLE_CSO": "Long",
+    "ROLE_CUSTOMER": "Long"
+  },
+  "usersByStatus": {
+    "ACTIVE": "Long",
+    "INACTIVE": "Long",
+    "BLOCKED": "Long"
+  },
+  "totalBranches": "long",
+  "totalManagers": "long",
+  "totalTellers": "long",
+  "totalCsos": "long",
+  "totalCustomers": "long"
 }
 ```
 

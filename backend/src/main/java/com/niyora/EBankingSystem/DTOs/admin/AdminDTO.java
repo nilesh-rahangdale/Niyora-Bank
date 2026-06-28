@@ -1,5 +1,6 @@
 package com.niyora.EBankingSystem.DTOs.admin;
 
+import com.niyora.EBankingSystem.DTOs.user.UserDto;
 import com.niyora.EBankingSystem.Entities.branch.Branch;
 import lombok.*;
 
@@ -10,8 +11,10 @@ import lombok.*;
 public class AdminDTO {
 
     private Long userId;
+    private UserDto userDto;
     private Long createdById;
     private Long branchId;
     private String adminLevel;
     private String permissions;
 }
+

@@ -53,7 +53,7 @@ public class SecurityConfigs {
                                         "/webjars/**",
                                         "/api/auth/**"
                                 ).permitAll()
-                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "MANAGER")
                                 .anyRequest().authenticated() )
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(cors->cors.configurationSource(corsConfigs()))

@@ -2,6 +2,7 @@ package com.niyora.EBankingSystem.Controllers.cso;
 
 import com.niyora.EBankingSystem.DTOs.auth.RegisterReqDto;
 import com.niyora.EBankingSystem.DTOs.cso.CsoDto;
+import com.niyora.EBankingSystem.DTOs.cso.CsoUpdateDto;
 import com.niyora.EBankingSystem.Entities.users.User;
 import com.niyora.EBankingSystem.Repositories.UserRepository;
 import com.niyora.EBankingSystem.Services.cso.CsoService;
@@ -13,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -45,6 +47,20 @@ public class CSOController {
     public ResponseEntity<CsoDto> getCsoById(@PathVariable Long csoId) {
         CsoDto csoDto = csoService.getCsoById(csoId);
         return ResponseEntity.ok(csoDto);
+    }
+
+    // Get all CSOs
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
+    @GetMapping
+    public ResponseEntity<List<CsoDto>> getAllCsos() {
+        return ResponseEntity.ok(csoService.getAllCsos());
+    }
+
+    // Update CSO
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
+    @PutMapping("/{csoId}")
+    public ResponseEntity<CsoDto> updateCso(@PathVariable Long csoId, @RequestBody CsoUpdateDto updateDto) {
+        return ResponseEntity.ok(csoService.updateCso(csoId, updateDto));
     }
 
 }

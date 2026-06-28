@@ -2,6 +2,7 @@ package com.niyora.EBankingSystem.Controllers.teller;
 
 import com.niyora.EBankingSystem.DTOs.auth.RegisterReqDto;
 import com.niyora.EBankingSystem.DTOs.teller.TellerDto;
+import com.niyora.EBankingSystem.DTOs.teller.TellerUpdateDto;
 import com.niyora.EBankingSystem.Entities.users.User;
 import com.niyora.EBankingSystem.Repositories.UserRepository;
 import com.niyora.EBankingSystem.Services.teller.TellerService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -72,5 +74,18 @@ public class TellerController {
         return ResponseEntity.ok(tellerService.setLastBalanced(lastBalancedDate,email));
     }
 
+    // Get all Tellers
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
+    @GetMapping
+    public ResponseEntity<List<TellerDto>> getAllTellers() {
+        return ResponseEntity.ok(tellerService.getAllTellers());
+    }
+
+    // Update Teller
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
+    @PutMapping("/{tellerId}")
+    public ResponseEntity<TellerDto> updateTeller(@PathVariable Long tellerId, @RequestBody TellerUpdateDto updateDto) {
+        return ResponseEntity.ok(tellerService.updateTeller(tellerId, updateDto));
+    }
 
 }

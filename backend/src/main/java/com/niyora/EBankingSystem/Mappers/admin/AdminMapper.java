@@ -8,6 +8,7 @@ public interface AdminMapper {
 
     @Mapping(source = "createdBy.id", target = "createdById")
     @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "user", target = "userDto")
     @Mapping(source = "branch.branchId", target = "branchId")
     AdminDTO toDTO(Admin admin);
 
