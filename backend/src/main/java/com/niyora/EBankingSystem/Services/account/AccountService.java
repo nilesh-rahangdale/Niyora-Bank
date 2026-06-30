@@ -175,6 +175,9 @@ public class AccountService {
 
         try {
 
+            if (account.getAccountStatus() != Account.Status.ACTIVE) {
+                throw new IllegalArgumentException("Account is not active");
+            }
 
             if (account.getBalance() < amount) {
                 throw new IllegalArgumentException("Insufficient balance for withdrawal");

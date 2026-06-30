@@ -44,7 +44,7 @@ public class TellerController {
     }
 
     //    Get Teller by ID
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('Teller')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('TELLER')")
     @GetMapping("/{tellerId}")
     public ResponseEntity<TellerDto> getTellerById(@PathVariable Long tellerId) {
         TellerDto tellerDto = tellerService.getTellerById(tellerId);

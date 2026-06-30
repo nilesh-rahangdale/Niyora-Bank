@@ -13,6 +13,7 @@ public class ComplaintRespDto {
     private Long complaintId;
     private Long customerId;
     private String customerName;
+    private Long branchId;
     private String branchIfsc;
     private String branchName;
     private String description;

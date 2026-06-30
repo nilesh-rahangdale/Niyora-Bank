@@ -42,7 +42,7 @@ public class BranchController {
     }
 
 //    Get Branch by IFSC
-    @PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('TELLER') or hasRole('CSO')")
     @PostMapping("/ifsc/{ifsc}")
     public ResponseEntity<?> getBranchByIfsc(@PathVariable String ifsc, Authentication auth) {
         if (auth == null) {
@@ -53,7 +53,7 @@ public class BranchController {
     }
 //    //    Get Branch by Branch Code
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('TELLER') or hasRole('CSO')")
     @PostMapping("/branchCode/{branchCode}")
     public ResponseEntity<?> getBranchByBranchCode(@PathVariable String branchCode, Authentication auth) {
         if (auth == null) {
@@ -64,7 +64,7 @@ public class BranchController {
     }
 
     // Get All Branches
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER') or hasRole('TELLER') or hasRole('CSO')")
     @GetMapping
     public ResponseEntity<?> getAllBranches(Authentication auth) {
         if (auth == null) {

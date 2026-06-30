@@ -138,6 +138,7 @@ public class ComplaintService {
                 .customerId(c.getCustomer() != null ? c.getCustomer().getCustomerId() : null)
                 .customerName(c.getCustomer() != null && c.getCustomer().getUser() != null
                         ? c.getCustomer().getUser().getFullName() : null)
+                .branchId(c.getBranch() != null ? c.getBranch().getBranchId() : null)
                 .branchIfsc(c.getBranch() != null ? c.getBranch().getBranchIfsc() : null)
                 .branchName(c.getBranch() != null ? c.getBranch().getBranchName() : null)
                 .description(c.getDescription())
